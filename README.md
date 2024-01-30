@@ -1,9 +1,11 @@
 # P5K
-This Google Chrome extension will make the following enhancements to the Pitchfork.com user experience:
+Google Chrome extension to make some improvements to the Pitchfork.com user experience.
+
+## Current enhancements
 - Reviews Page
   - Display rating next to album thumbnail
 
-Future enhancements:
+## Future enhancements
 - Individual Review Page
   - Display general information about artist/album from various sources (Wikipedia, Spotify, Metacritic, ...)
     - Release date
