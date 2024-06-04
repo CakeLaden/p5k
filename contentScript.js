@@ -1,15 +1,15 @@
 function addReviewScores() {
-  const albumGridItems = document.querySelectorAll('.review-grid__item');
+  const albumGridItems = document.querySelectorAll('.summary-item');
+  const firstFiveAlbumGridItems = array.slice(0, n);
   albumGridItems.forEach((item) => {
-    const albumLink = item.querySelector('.review-grid__item__link');
-    const artistName = item.querySelector('.review-grid__item__artist');
+    const albumLink = item.querySelector('.summary-item__image-link');
+    const artistName = item.querySelector('.summary-item__sub-hed');
     fetch(albumLink.href)
       .then((response) => response.text())
       .then((html) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        const scoreCircle = doc.querySelector('div[class^="ScoreCircle-"]');
-        const rating = scoreCircle.querySelector('p[class^="Rating-"]');
+        const rating = doc.querySelector('div[class^="ScoreCircle-"] p');
         const reviewScore = rating.textContent;
         const reviewScoreParagraph = document.createElement('p');
         reviewScoreParagraph.textContent = reviewScore;
