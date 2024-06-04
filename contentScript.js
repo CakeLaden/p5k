@@ -1,6 +1,10 @@
+let albumIndex = 0;
+const albumsPerBatch = 6;
+
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
-  albumGridItems.forEach((item) => {
+  const albumBatch = Array.from(albumGridItems).slice(albumIndex, albumIndex + albumsPerBatch);
+  albumBatch.forEach((item) => {
     const albumLink = item.querySelector('.summary-item__image-link');
     const artistName = item.querySelector('.summary-item__sub-hed');
     fetch(albumLink.href)
@@ -18,4 +22,15 @@ function addReviewScores() {
   });
 }
 
+function addLoadMoreButton() {
+  const loadMoreButton = document.createElement('button');
+  loadMoreButton.textContent = 'Load more albums';
+  loadMoreButton.addEventListener('click', () => {
+    albumIndex += albumsPerBatch;
+    addReviewScores();
+  });
+  document.body.insertBefore(loadMoreButton, document.body.firstChild);
+}
+
 addReviewScores();
+addLoadMoreButton();
