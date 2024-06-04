@@ -1,10 +1,10 @@
 let albumIndex = 0;
-const albumsPerBatch = 6;
+const albumsPerPage = 6;
 
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
-  const albumBatch = Array.from(albumGridItems).slice(albumIndex, albumIndex + albumsPerBatch);
-  albumBatch.forEach((item) => {
+  const albumSlice = Array.prototype.slice.call(albumGridItems, albumIndex, albumIndex + albumsPerPage);
+  albumSlice.forEach((item) => {
     const albumLink = item.querySelector('.summary-item__image-link');
     const artistName = item.querySelector('.summary-item__sub-hed');
     fetch(albumLink.href)
@@ -22,15 +22,15 @@ function addReviewScores() {
   });
 }
 
-function addLoadMoreButton() {
-  const loadMoreButton = document.createElement('button');
-  loadMoreButton.textContent = 'Load more albums';
-  loadMoreButton.addEventListener('click', () => {
-    albumIndex += albumsPerBatch;
+function addMoreButton() {
+  const moreButton = document.createElement('button');
+  moreButton.textContent = 'Load more albums';
+  moreButton.addEventListener('click', () => {
+    albumIndex += albumsPerPage;
     addReviewScores();
   });
-  document.body.insertBefore(loadMoreButton, document.body.firstChild);
+  document.body.insertBefore(moreButton, document.body.firstChild);
 }
 
 addReviewScores();
-addLoadMoreButton();
+addMoreButton();
