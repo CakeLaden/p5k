@@ -35,7 +35,11 @@ function addLoadMoreButton() {
   loadMoreButton.style.border = 'none';
   loadMoreButton.style.borderRadius = '5px';
   loadMoreButton.style.cursor = 'pointer';
+  loadMoreButton.style.zIndex = '9999';
   loadMoreButton.addEventListener('click', () => {
+    albumIndex += albumsPerBatch;
+    addReviewScores();
+    loadMoreButton.disabled = true;
     const loadingSpinner = document.createElement('div');
     loadingSpinner.style.position = 'fixed';
     loadingSpinner.style.top = '50%';
@@ -43,12 +47,22 @@ function addLoadMoreButton() {
     loadingSpinner.style.transform = 'translate(-50%, -50%)';
     loadingSpinner.style.width = '50px';
     loadingSpinner.style.height = '50px';
-    loadingSpinner.style.background = 'url(https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif) no-repeat';
-    loadingSpinner.style.backgroundSize = 'cover';
+    loadingSpinner.style.background = 'rgba(0, 0, 0, 0.7)';
+    loadingSpinner.style.borderRadius = '50%';
+    loadingSpinner.style.display = 'flex';
+    loadingSpinner.style.justifyContent = 'center';
+    loadingSpinner.style.alignItems = 'center';
+    const spinner = document.createElement('div');
+    spinner.style.width = '25px';
+    spinner.style.height = '25px';
+    spinner.style.border = '3px solid #fff';
+    spinner.style.borderTopColor = '#4CAF50';
+    spinner.style.borderRadius = '50%';
+    spinner.style.animation = 'spin 1s linear infinite';
+    loadingSpinner.appendChild(spinner);
     document.body.appendChild(loadingSpinner);
-    albumIndex += albumsPerBatch;
-    addReviewScores();
     setTimeout(() => {
+      loadMoreButton.disabled = false;
       loadingSpinner.remove();
     }, 2000);
   });
