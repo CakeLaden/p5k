@@ -1,8 +1,8 @@
 function addReviewLinks() {
-  const albumGridItems = document.querySelectorAll('.review-grid__item');
+  const albumGridItems = document.querySelectorAll('.summary-item');
   albumGridItems.forEach((item) => {
-    const albumLink = item.querySelector('.review-grid__item__link');
-    const artistName = item.querySelector('.review-grid__item__artist');
+    const albumLink = item.querySelector('.summary-item__image-link');
+    const artistName = item.querySelector('.summary-item__sub-hed');
     const reviewLinkParagraph = document.createElement('p');
     reviewLinkParagraph.textContent = albumLink.href;
     artistName.parentNode.insertBefore(reviewLinkParagraph, artistName.nextSibling);
