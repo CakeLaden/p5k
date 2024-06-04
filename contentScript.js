@@ -1,13 +1,13 @@
 let albumIndex = 0;
-const albumsPerBatch = 6;
+const albumsPerBatch = 3;
 
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
   const albumBatch = Array.from(albumGridItems).slice(albumIndex, albumIndex + albumsPerBatch);
-  albumBatch.forEach((item) => {
+  const promises = albumBatch.map((item) => {
     const albumLink = item.querySelector('.summary-item__image-link');
     const artistName = item.querySelector('.summary-item__sub-hed');
-    fetch(albumLink.href)
+    return fetch(albumLink.href)
       .then((response) => response.text())
       .then((html) => {
         const parser = new DOMParser();
@@ -20,6 +20,7 @@ function addReviewScores() {
       })
       .catch((error) => console.error(error));
   });
+  return Promise.all(promises);
 }
 
 function addLoadMoreButton() {
@@ -36,35 +37,32 @@ function addLoadMoreButton() {
   loadMoreButton.style.borderRadius = '5px';
   loadMoreButton.style.cursor = 'pointer';
   loadMoreButton.style.zIndex = '9999';
+  const loadingSpinner = document.createElement('div');
+  loadingSpinner.style.display = 'none';
+  loadingSpinner.style.position = 'absolute';
+  loadingSpinner.style.top = '50%';
+  loadingSpinner.style.transform = 'translateY(-50%)';
+  loadingSpinner.style.width = '25px';
+  loadingSpinner.style.height = '25px';
+  loadingSpinner.style.background = 'rgba(0, 0, 0, 0.7)';
+  loadingSpinner.style.borderRadius = '50%';
+  loadingSpinner.style.justifyContent = 'center';
+  loadingSpinner.style.alignItems = 'center';
+  const spinner = document.createElement('div');
+  spinner.style.width = '20px';
+  spinner.style.height = '20px';
+  spinner.style.border = '3px solid #fff';
+  spinner.style.borderTopColor = '#4CAF50';
+  spinner.style.borderRadius = '50%';
+  spinner.style.animation = 'spin 1s linear infinite';
+  loadingSpinner.appendChild(spinner);
+  loadMoreButton.appendChild(loadingSpinner);
   loadMoreButton.addEventListener('click', () => {
     albumIndex += albumsPerBatch;
-    addReviewScores();
-    loadMoreButton.disabled = true;
-    const loadingSpinner = document.createElement('div');
-    loadingSpinner.style.position = 'fixed';
-    loadingSpinner.style.top = '50%';
-    loadingSpinner.style.left = '50%';
-    loadingSpinner.style.transform = 'translate(-50%, -50%)';
-    loadingSpinner.style.width = '50px';
-    loadingSpinner.style.height = '50px';
-    loadingSpinner.style.background = 'rgba(0, 0, 0, 0.7)';
-    loadingSpinner.style.borderRadius = '50%';
     loadingSpinner.style.display = 'flex';
-    loadingSpinner.style.justifyContent = 'center';
-    loadingSpinner.style.alignItems = 'center';
-    const spinner = document.createElement('div');
-    spinner.style.width = '25px';
-    spinner.style.height = '25px';
-    spinner.style.border = '3px solid #fff';
-    spinner.style.borderTopColor = '#4CAF50';
-    spinner.style.borderRadius = '50%';
-    spinner.style.animation = 'spin 1s linear infinite';
-    loadingSpinner.appendChild(spinner);
-    document.body.appendChild(loadingSpinner);
-    setTimeout(() => {
-      loadMoreButton.disabled = false;
-      loadingSpinner.remove();
-    }, 2000);
+    addReviewScores().then(() => {
+      loadingSpinner.style.display = 'none';
+    });
   });
   document.body.appendChild(loadMoreButton);
 }
