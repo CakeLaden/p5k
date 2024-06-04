@@ -1,18 +1,6 @@
 let albumIndex = 0;
 const albumsPerBatch = 3;
 
-function blockAds() {
-  const adSelectors = [
-    '.ad', '.ads', '.advert', '.advertisement', '.ad-wrapper', '.ad-container',
-    '.google-ad', '.ad-placeholder', '.ad-unit', '.ad-space', '.ad-slot',
-  ];
-  adSelectors.forEach((selector) => {
-    document.querySelectorAll(selector).forEach((ad) => {
-      ad.remove();
-    });
-  });
-}
-
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
   const albumBatch = Array.from(albumGridItems).slice(albumIndex, albumIndex + albumsPerBatch);
@@ -79,9 +67,25 @@ function addLoadMoreButton() {
   document.body.appendChild(loadMoreButton);
 }
 
-blockAds();
 addReviewScores();
 addLoadMoreButton();
 
-// Call blockAds every second to remove any ads that might have loaded after the initial blockAds call
-setInterval(blockAds, 1000);
+// Remove ads every second for the first 10 seconds of page load
+let adBlockAttempt = 0, maxAdBlockAttempts = 10;
+const adBlockInterval = setInterval(() => {
+  const adSelectors = [
+    '.ad', '.ads', '.advert', '.advertisement', '.ad-wrapper', '.ad-container',
+    '.google-ad', '.ad-placeholder', '.ad-unit', '.ad-space', '.ad-slot',
+  ];
+  adSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((ad) => {
+      ad.remove();
+    });
+  });
+
+  adBlockAttempt += 1;
+  console.log('ad block loop index ' + adBlockAttempt);
+  if (adBlockAttempt >= maxAdBlockAttempts) {
+    clearInterval(adBlockInterval);
+  }
+}, 1000);
