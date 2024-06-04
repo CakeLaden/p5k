@@ -7,7 +7,7 @@ console.log('Thumbnails: ' + reviews?.length);
 // `document.querySelector` may return null if the selector doesn't match anything.
 if (reviews?.length) {
   reviews.forEach((review) => {
-    const ratingBadge = document.createElement('div');
+    const ratingBadge = document.createElement(`div`);
     // TODO: implement style that matches Pitchfork review page
     ratingBadge.style.cssText = `
       width: 40px; 
@@ -19,32 +19,23 @@ if (reviews?.length) {
       padding-top: 10px; 
       font-size: 1.5em;
     `;
+
     // TODO: fetch actual review and grab rating
-    ratingBadge.textContent = "8.5";
+    fetch(new Request(`https://pitchfork.com/reviews/albums/jake-muir-bathhouse-blues/`))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-    review.insertAdjacentElement('beforeend', ratingBadge);
+        return response.blob();
+      })
+      .then((response) => {
+        myImage.src = URL.createObjectURL(response);
+      });
+
+
+    ratingBadge.textContent = `8.5`;
+
+    review.insertAdjacentElement(`beforeend`, ratingBadge);
   });
-
-  // Original code from Google sample "readingTime" extension:
-  /*
-  const text = article.textContent;
-
-  const wordMatchRegExp = /[^\s]+/g;
-  const words = text.matchAll(wordMatchRegExp);
-  // matchAll returns an iterator, convert to array to get word count
-  const wordCount = [...words].length;
-  const readingTime = Math.round(wordCount / 200);
-  const badge = document.createElement('p');
-  // Use the same styling as the publish information in an article's header
-  badge.classList.add('color-secondary-text', 'type--caption');
-  badge.textContent = `⏱️ ${readingTime} min read`;
-
-  // Support for API reference docs
-  const heading = article.querySelector('h1');
-  // Support for article docs with date
-  const date = article.querySelector('time')?.parentNode;
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
-  (date ?? heading).insertAdjacentElement('afterend', badge);
-  */
 }
