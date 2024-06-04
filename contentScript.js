@@ -9,7 +9,6 @@ function addReviewScores() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const rating = doc.querySelector('div[class^="ScoreCircle-"] p');
-        const rating = scoreCircle.querySelector('p[class^="Rating-"]');
         const reviewScore = rating.textContent;
         const reviewScoreParagraph = document.createElement('p');
         reviewScoreParagraph.textContent = reviewScore;
