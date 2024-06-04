@@ -1,6 +1,5 @@
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
-  const firstFiveAlbumGridItems = array.slice(0, n);
   albumGridItems.forEach((item) => {
     const albumLink = item.querySelector('.summary-item__image-link');
     const artistName = item.querySelector('.summary-item__sub-hed');
@@ -9,7 +8,8 @@ function addReviewScores() {
       .then((html) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        const rating = doc.querySelector('div[class^="ScoreCircle-"] p');
+        const scoreCircle = doc.querySelector('div[class^="ScoreCircle-"]');
+        const rating = scoreCircle.querySelector('p[class^="Rating-"]');
         const reviewScore = rating.textContent;
         const reviewScoreParagraph = document.createElement('p');
         reviewScoreParagraph.textContent = reviewScore;
