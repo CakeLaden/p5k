@@ -1,10 +1,10 @@
 let albumIndex = 0;
-const albumsPerPage = 6;
+const albumsPerBatch = 6;
 
 function addReviewScores() {
   const albumGridItems = document.querySelectorAll('.summary-item');
-  const albumSlice = Array.prototype.slice.call(albumGridItems, albumIndex, albumIndex + albumsPerPage);
-  albumSlice.forEach((item) => {
+  const albumBatch = Array.from(albumGridItems).slice(albumIndex, albumIndex + albumsPerBatch);
+  albumBatch.forEach((item) => {
     const albumLink = item.querySelector('.summary-item__image-link');
     const artistName = item.querySelector('.summary-item__sub-hed');
     fetch(albumLink.href)
@@ -22,15 +22,38 @@ function addReviewScores() {
   });
 }
 
-function addMoreButton() {
-  const moreButton = document.createElement('button');
-  moreButton.textContent = 'Load more albums';
-  moreButton.addEventListener('click', () => {
-    albumIndex += albumsPerPage;
+function addLoadMoreButton() {
+  const loadMoreButton = document.createElement('button');
+  loadMoreButton.textContent = 'Load More Ratings';
+  loadMoreButton.style.position = 'fixed';
+  loadMoreButton.style.bottom = '20px';
+  loadMoreButton.style.right = '20px';
+  loadMoreButton.style.padding = '10px 20px';
+  loadMoreButton.style.fontSize = '16px';
+  loadMoreButton.style.background = '#4CAF50';
+  loadMoreButton.style.color = '#fff';
+  loadMoreButton.style.border = 'none';
+  loadMoreButton.style.borderRadius = '5px';
+  loadMoreButton.style.cursor = 'pointer';
+  loadMoreButton.addEventListener('click', () => {
+    const loadingSpinner = document.createElement('div');
+    loadingSpinner.style.position = 'fixed';
+    loadingSpinner.style.top = '50%';
+    loadingSpinner.style.left = '50%';
+    loadingSpinner.style.transform = 'translate(-50%, -50%)';
+    loadingSpinner.style.width = '50px';
+    loadingSpinner.style.height = '50px';
+    loadingSpinner.style.background = 'url(https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif) no-repeat';
+    loadingSpinner.style.backgroundSize = 'cover';
+    document.body.appendChild(loadingSpinner);
+    albumIndex += albumsPerBatch;
     addReviewScores();
+    setTimeout(() => {
+      loadingSpinner.remove();
+    }, 2000);
   });
-  document.body.insertBefore(moreButton, document.body.firstChild);
+  document.body.appendChild(loadMoreButton);
 }
 
 addReviewScores();
-addMoreButton();
+addLoadMoreButton();
