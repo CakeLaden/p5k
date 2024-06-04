@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Hello World Extension",
+  "name": "p5k",
   "version": "1.0",
-  "description": "A simple Chrome extension that adds a 'Hello World' h1 element to the page.",
+  "description": "A Chrome extension that adds a <p> element under each artist name displaying the URL for that album's individual review page.",
   "icons": {
     "128": "icon.png"
   },
