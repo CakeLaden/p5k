@@ -1,6 +1,6 @@
 let albumIndex = 0;
 const albumsPerBatch = 3;
-const albumReviewSelector = '.summary-item--review';
+const albumReviewSelector = '.summary-item';
 const customReviewScoreClass = 'p5k-review-score';
 
 function addReviewScores() {
